@@ -64,7 +64,7 @@
       // 绘制爱心曲线    
       ctx.beginPath();
       for (let t = 0; t < 2 * Math.PI; t += 0.01) {
-        const { x, y } = drawHeart(t, 20);
+        const { x, y } = drawHeart(t, 10);
         ctx.lineTo(x + canvas.width / 2, y + canvas.height / 2 + heartPosition);
       }
 
