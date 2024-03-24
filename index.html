@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>爱心</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="heartCanvas" width="800" height="800"></canvas>
+
+  <script>
+    const canvas = document.getElementById('heartCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // 设置背景色    
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // 爱心曲线的参数方程    
+    const drawHeart = (t, scale) => {
+      const x = 16 * Math.pow(Math.sin(t), 3);
+      const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+      return { x: x * scale, y: y * scale };
+    };
+
+    let heartPosition = 0;
+    let direction = 1; // 1 为向上，-1 为向下  
+    let heartColor = 'red';
+
+    function animateHeart() {
+      // 更新心形的位置  
+      heartPosition += 2 * direction;
+
+      // 当心形到达顶部或底部时，反转方向  
+      if (heartPosition >= 20 || heartPosition <= -20) {
+        direction *= -1;
+      }
+
+      // 随机改变心形颜色  
+      if (Math.random() < 0.02) {
+        heartColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+      }
+
+      // 清除画布  
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 设置背景色    
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // 设置线条颜色和样式    
+      ctx.strokeStyle = heartColor;
+      ctx.lineWidth = 2;
+
+      // 绘制爱心曲线    
+      ctx.beginPath();
+      for (let t = 0; t < 2 * Math.PI; t += 0.01) {
+        const { x, y } = drawHeart(t, 20);
+        ctx.lineTo(x + canvas.width / 2, y + canvas.height / 2 + heartPosition);
+      }
+
+      // 结束路径并绘制    
+      ctx.stroke();
+      ctx.closePath();
+
+      // 请求下一帧动画  
+      requestAnimationFrame(animateHeart);
+    }
+
+    // 开始动画  
+    animateHeart();  
+  </script>
+
+</body>
+
+</html>
