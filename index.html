@@ -67,11 +67,17 @@
         const { x, y } = drawHeart(t, 10);
         ctx.lineTo(x + canvas.width / 2, y + canvas.height / 2 + heartPosition);
       }
-
       // 结束路径并绘制    
       ctx.stroke();
       ctx.closePath();
-
+      ctx.beginPath();
+      for (let t = 0; t < 2 * Math.PI; t += 0.01) {
+        const { x, y } = drawHeart(t, 5);
+        ctx.lineTo(x + canvas.width / 2, y + canvas.height / 2 + heartPosition);
+      }
+      // 结束路径并绘制    
+      ctx.stroke();
+      ctx.closePath();
       // 请求下一帧动画  
       requestAnimationFrame(animateHeart);
     }
