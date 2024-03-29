@@ -4,74 +4,157 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>爱心</title>
+  <title>走心</title>
   <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    html {
+      height: 100%;
     }
+
+    body {
+      height: 100%;
+      display: flex;
+      justify-content: space-around;
+      /* align-items: center; */
+      position: relative;
+    }
+
+    /* HTML: <div class="loader"></div> */
+    .loader {
+      position: absolute;
+      width: 50px;
+      aspect-ratio: 1;
+      color: #dc1818;
+      background:
+        radial-gradient(circle at 60% 65%, currentColor 62%, #0000 65%) top left,
+        radial-gradient(circle at 40% 65%, currentColor 62%, #0000 65%) top right,
+        linear-gradient(to bottom left, currentColor 42%, #0000 43%) bottom left,
+        linear-gradient(to bottom right, currentColor 42%, #0000 43%) bottom right;
+      background-size: 50% 50%;
+      background-repeat: no-repeat;
+      animation: rain 5s linear infinite;
+      /* 雨滴下落动画 */
+    }
+
+    @keyframes rain {
+      0% {
+        transform: translateY(80vh);
+        /* 初始位置不变 */
+      }
+
+      100% {
+        transform: translateY(20vh);
+        /* 移动到视口顶部之外，实现下落效果 */
+      }
+    }
+
+    /* .loader:after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: inherit;
+      opacity: 0.4;
+      animation: l3 1s infinite;
+    } */
+
+    /* @keyframes l3 {
+      to {
+        transform: scale(1.8);
+        opacity: 0
+      }
+    } */
   </style>
 </head>
 
 <body>
-  <canvas id="heartCanvas" width="800" height="800"></canvas>
+  <div class="loader"></div>
+  <div class="loader"></div>
+  <div class="loader"></div>
+  <div class="loader"></div>
+  <div class="loader"></div>
+  <div class="loader"></div>
+  <div class="loader"></div>
+  <div class="loader"></div>
+  <div class="loader"></div>
+  <div class="loader"></div>
+  <div class="loader"></div>
+  <div class="loader"></div>
+  <div class="loader"></div>
+  <!-- <canvas id="heartCanvas" width="800" height="800"></canvas> -->
 
   <script>
-    const canvas = document.getElementById('heartCanvas');
-    const ctx = canvas.getContext('2d');
+    function loveStart() {
+      const canvas = document.getElementById('heartCanvas');
+      const ctx = canvas.getContext('2d');
 
-    // 爱心曲线的参数方程  
-    const drawHeart = (t, scale) => {
-      const x = 16 * Math.pow(Math.sin(t), 3);
-      const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
-      return { x: x * scale + canvas.width / 2, y: y * scale + canvas.height / 2 };
-    };
+      // 爱心曲线的参数方程  
+      const drawHeart = (t, scale) => {
+        const x = 16 * Math.pow(Math.sin(t), 3);
+        const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+        return { x: x * scale + canvas.width / 2, y: y * scale + canvas.height / 2 };
+      };
 
-    let drawProgress = 0; // 绘制进度  
-    const totalProgress = 2 * Math.PI; // 总绘制进度  
-    const heartColor = 'red'; // 心形颜色  
-    const lineWidth = 2; // 线条宽度  
+      let drawProgress = 0; // 绘制进度  
+      const totalProgress = 2 * Math.PI; // 总绘制进度  
+      const heartColor = 'red'; // 心形颜色  
+      const lineWidth = 2; // 线条宽度  
 
-    function animateHeart() {
-      // 清除画布  
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      function animateHeart() {
+        // 清除画布  
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // 设置线条颜色和样式  
-      ctx.strokeStyle = heartColor;
-      ctx.lineWidth = lineWidth;
+        // 设置线条颜色和样式  
+        ctx.strokeStyle = heartColor;
+        ctx.lineWidth = lineWidth;
 
-      // 开始绘制心形  
-      ctx.beginPath();
+        // 开始绘制心形  
+        ctx.beginPath();
 
-      // 找到一个合适的起始点，比如 t = Math.PI / 4，这样心形将从顶部开始绘制  
-      let startT = 0;
-      const { x: startX, y: startY } = drawHeart(startT, 10);
-      ctx.moveTo(startX, startY); // 从心形的起始点开始  
+        // 找到一个合适的起始点，比如 t = Math.PI / 4，这样心形将从顶部开始绘制  
+        let startT = 0;
+        const { x: startX, y: startY } = drawHeart(startT, 10);
+        ctx.moveTo(startX, startY); // 从心形的起始点开始  
 
-      for (let t = startT; t <= drawProgress + startT; t += 0.01) {
-        const { x, y } = drawHeart(t, 10);
-        ctx.lineTo(x, y);
+        for (let t = startT; t <= drawProgress + startT; t += 0.01) {
+          const { x, y } = drawHeart(t, 10);
+          ctx.lineTo(x, y);
+        }
+
+        // 结束路径并绘制  
+        ctx.stroke();
+        ctx.closePath();
+
+        // 增加绘制进度  
+        drawProgress += 0.02;
+
+        // 如果心形绘制完成，则重置进度  
+        if (drawProgress >= totalProgress) {
+          setTimeout(() => {
+            drawProgress = 0;
+          }, 1000);
+        }
+        requestAnimationFrame(animateHeart);
       }
 
-      // 结束路径并绘制  
-      ctx.stroke();
-      ctx.closePath();
-
-      // 增加绘制进度  
-      drawProgress += 0.02;
-
-      // 如果心形绘制完成，则重置进度  
-      if (drawProgress >= totalProgress) {
-        setTimeout(() => {
-          drawProgress = 0;
-        }, 1000);
-      }
-      requestAnimationFrame(animateHeart);
+      // 开始动画  
+      animateHeart();
     }
+    // loveStart()
+    // 获取所有class为loader的元素  
+    const loaders = document.querySelectorAll('.loader');
+    function rain() {
+      loaders.forEach(function (loader) {
+        // 假设你想为每个元素设置一个随机的left值  
+        const randomLeft = Math.random() * (window.innerWidth - loader.offsetWidth);
 
-    // 开始动画  
-    animateHeart();  
+        // 修改元素的left样式  
+        loader.style.left = `${randomLeft}px`;
+      });
+    }
+    rain()
+    // 遍历这些元素  
+    setInterval(() => {
+      rain()
+    }, 5000);
   </script>
 
 </body>
